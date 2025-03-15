@@ -8,41 +8,18 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 
-const allowedOrigins = [
-  "https://react-vite-tailwind-portfolio.vercel.app",
-  "https://react-vite-tailwind-portfolio-deploy.vercel.app",
-  "http://localhost:5173"  // For local development
-];
-
+// Dynamic CORS handling
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (!origin || origin.includes("vercel.app")) {
+      callback(null, true);  // Allow any Vercel domain or localhost
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST"],
-  credentials: true
+  credentials: true,
 }));
-
-// Location Tracking Middleware
-app.use(async (req, res, next) => {
-  let ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
-  if (!ip || ip === "::1" || ip === "127.0.0.1") {
-    console.log("Skipping location tracking for localhost.");
-    return next();
-  }
-  try {
-    const response = await axios.get(`http://ip-api.com/json/${ip}`);
-    if (response.data.status !== "success") throw new Error("IP lookup failed.");
-
-    const locationData = {
-      city: response.data.city || "Unknown",
-      country: response.data.country || "Unknown",
-      timestamp: new Date().toISOString(),
-    };
-    fs.writeFileSync("visitor.json", JSON.stringify(locationData, null, 2));
-    console.log("Visitor location updated:", locationData);
-  } catch (error) {
-    console.error("Error fetching IP location:", error);
-  }
-  next();
-});
 
 // API Routes
 app.get("/api/last-visitor", (req, res) => {
