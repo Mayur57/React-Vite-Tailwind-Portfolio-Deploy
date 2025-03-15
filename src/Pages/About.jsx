@@ -41,7 +41,7 @@ export default function About() {
 
     // ✅ Function to send a poke notification const BACKEND_URL = "https://react-vite-tailwind-portfolio-deploy-hdgx.vercel.app"; 2:30 7 march
     
-    const BACKEND_URL = "https://react-vite-tailwind-portfolio.vercel.app/";
+    const BACKEND_URL = "https://react-vite-tailwind-portfolio.vercel.app";
 
 
 const handlePoke = async () => {
