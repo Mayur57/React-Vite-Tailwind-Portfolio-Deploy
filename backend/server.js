@@ -7,16 +7,18 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "https://www.harshbhoi.dev",
-      "https://react-vite-tailwind-portfolio-deploy-nine.vercel.app"
-    ],
-    methods: "GET,POST",
-    credentials: true,
-  })
-);
+
+const allowedOrigins = [
+  "https://react-vite-tailwind-portfolio.vercel.app",
+  "https://react-vite-tailwind-portfolio-deploy.vercel.app",
+  "http://localhost:5173"  // For local development
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 
 // Location Tracking Middleware
 app.use(async (req, res, next) => {
