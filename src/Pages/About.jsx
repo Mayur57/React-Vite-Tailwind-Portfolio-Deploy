@@ -48,7 +48,7 @@ const handlePoke = async () => {
     setPokeStatus("Poking...");
 
     try {
-        await axios.post(`${BACKEND_URL}/poke`);
+        await axios.post(`/api/poke`);
         setPokeStatus("Poke sent successfully!");
     } catch (error) {
         console.error("Poke Error:", error);
